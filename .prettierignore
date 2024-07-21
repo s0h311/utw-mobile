@@ -1,0 +1,8 @@
+.expo
+.vscode
+.idea
+node_modules
+ios
+android
+*.d.ts
+assets
