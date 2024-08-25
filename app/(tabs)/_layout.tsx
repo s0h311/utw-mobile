@@ -27,10 +27,10 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="profile"
+      {/* <Tabs.Screen
+        name="mapbox"
         options={{
-          title: 'Profile',
+          title: 'Mapbox',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'home' : 'home-outline'}
@@ -38,7 +38,7 @@ export default function TabLayout() {
             />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="explore"
         options={{

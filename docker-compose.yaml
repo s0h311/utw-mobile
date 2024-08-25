@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: imresamu/postgis-arm64:16-recent-bookworm
+    restart: always
+    environment:
+      - POSTGRES_USER=utw
+      - POSTGRES_PASSWORD=what
+    ports:
+      - '5432:5432'
+    volumes:
+      - utw_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  utw_postgres_data:

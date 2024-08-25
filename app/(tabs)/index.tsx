@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
 } from 'react-native'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Geojson, PROVIDER_GOOGLE, Polygon } from 'react-native-maps'
 import {
   getCurrentPositionAsync,
   useForegroundPermissions,
@@ -15,20 +15,54 @@ import { useEffect, useRef, useState } from 'react'
 import LocationArrow from '@/components/Icon/LocationArrow'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { shadowM } from '@/assets/styles'
+import germanyLevel2 from '@/assets/germany-osm-2.json'
+import germanyLevel4 from '@/assets/germany-osm-4.json'
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState<string>('')
   const [status, requestPermission] = useForegroundPermissions()
 
   const DUMMY_places = [
-    'Empire State Building',
-    'Golden Gate Bridge',
-    'Venice Beach',
-    'Grand Canyon',
-    'Statue of Liberty',
+    {
+      id: 1,
+      name: 'Empire State Building',
+      latitude: 40.74844205,
+      longtitude: -73.98565890160751,
+    },
+    {
+      id: 2,
+      name: 'Golden Gate Bridge',
+      latitude: 37.81990665,
+      longtitude: -122.47858000733174,
+    },
+    {
+      id: 3,
+      name: 'Venice Beach',
+      latitude: 33.97996005,
+      longtitude: -118.4687710293081,
+    },
+    {
+      id: 4,
+      name: 'Grand Canyon',
+      latitude: 36.307854750000004,
+      longtitude: -112.29289603702432,
+    },
+    {
+      id: 5,
+      name: 'Statue of Liberty',
+      latitude: 40.689253199999996,
+      longtitude: -74.04454817144321,
+    },
   ]
 
-  const [searchResult, setSearchResult] = useState<string[]>(DUMMY_places)
+  const [searchResult, setSearchResult] = useState<
+    {
+      id: number
+      name: string
+      latitude: number
+      longtitude: number
+    }[]
+  >(DUMMY_places)
 
   useEffect(() => {
     if (!status?.granted) {
@@ -53,7 +87,40 @@ export default function HomeScreen() {
 
   function updateSearchResult(text: string): void {
     setSearchText(text)
-    setSearchResult(DUMMY_places.filter((place) => place.includes(text)))
+    setSearchResult(DUMMY_places.filter((place) => place.name.includes(text)))
+  }
+
+  function goToPlace(placeId: number): void {
+    const place = DUMMY_places.find((place) => place.id === placeId)
+
+    if (!place) {
+      // TODO handle error
+      return
+    }
+
+    setSearchText('')
+
+    mapRef.current?.animateToRegion({
+      latitude: place.latitude,
+      longitude: place.longtitude,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
+    })
+  }
+
+  useEffect(() => {
+    const map = mapRef.current
+
+    if (!map) return
+  })
+
+  function getLevel4(levelName: string): any {
+    return {
+      ...germanyLevel4,
+      features: germanyLevel4.features.filter(
+        (f) => f.properties.name !== levelName,
+      ),
+    }
   }
 
   return (
@@ -70,7 +137,9 @@ export default function HomeScreen() {
             <FlatList
               data={searchResult}
               renderItem={({ item }) => (
-                <Text style={styles.searchEntry}>{item}</Text>
+                <Pressable onPress={() => goToPlace(item.id)}>
+                  <Text style={styles.searchEntry}>{item.name}</Text>
+                </Pressable>
               )}
             />
           </View>
@@ -83,8 +152,16 @@ export default function HomeScreen() {
           style={styles.map}
           showsUserLocation={true}
           zoomEnabled={true}
-          provider={PROVIDER_GOOGLE}
-        />
+          // provider={PROVIDER_GOOGLE}
+        >
+          <Geojson
+            geojson={getLevel4('Hamburg')}
+            strokeColor="transparent"
+            fillColor="rgba(0,0,0,0.8)"
+            zIndex={1}
+            strokeWidth={2}
+          />
+        </MapView>
 
         <Pressable style={styles.centerMapButton} onPress={centerMap}>
           <LocationArrow fill="#333" />

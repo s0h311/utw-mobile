@@ -40,6 +40,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'Allow $(PRODUCT_NAME) to use your location.',
       },
     ],
+    [
+      '@rnmapbox/maps',
+      {
+        RNMapboxMapsDownloadToken: process.env.MAPBOX_SK,
+        RNMapboxMapsVersion: '11.0.0',
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
