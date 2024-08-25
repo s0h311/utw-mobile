@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
 } from 'react-native'
-import MapView, { Geojson, PROVIDER_GOOGLE, Polygon } from 'react-native-maps'
+import MapView, { Geojson } from 'react-native-maps'
 import {
   getCurrentPositionAsync,
   useForegroundPermissions,
@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from 'react'
 import LocationArrow from '@/components/Icon/LocationArrow'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { shadowM } from '@/assets/styles'
-import germanyLevel2 from '@/assets/germany-osm-2.json'
 import germanyLevel4 from '@/assets/germany-osm-4.json'
 
 export default function HomeScreen() {

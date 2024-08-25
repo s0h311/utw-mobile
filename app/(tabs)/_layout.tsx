@@ -27,18 +27,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="mapbox"
-        options={{
-          title: 'Mapbox',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-            />
-          ),
-        }}
-      /> */}
       <Tabs.Screen
         name="explore"
         options={{
